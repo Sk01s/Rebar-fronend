@@ -1,0 +1,1 @@
+import{a as s,c as t,r as a,b as o}from"./index-4894d9cd.js";function i(){const r=s(),{categories:e}=t();return a.useEffect(()=>{e.length!==0&&r("/Tech-Mode")},[e]),o("h1",{className:"error",children:"Check your internet "})}export{i as default};

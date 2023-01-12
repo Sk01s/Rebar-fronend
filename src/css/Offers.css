@@ -1,0 +1,45 @@
+/* start offers */
+.offers {
+  grid-template-columns: repeat(auto-fit, minmax(250px, auto));
+  margin-top: 20px;
+  gap: 2rem;
+}
+.offers .offer-card {
+  color: var(--color-pri);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 500px;
+  border-radius: 10px;
+}
+.offers .offer-card .details {
+  padding: 50px;
+  max-width: 60%;
+}
+.offers .offer-card .details h2 {
+  font-size: 2.65rem;
+  margin: 0;
+}
+.offers .offer-card .details p {
+  margin: 0;
+  margin-top: 1.4rem;
+  font-size: 1.2rem;
+}
+.offers .offer-card .details a {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 12px 40px;
+  color: var(--color-text);
+  border: solid 1px var(--color-pri);
+  background-color: var(--color-pri);
+  border-radius: 20px;
+  font-size: 1.5rem;
+  text-transform: capitalize;
+  transition: 200ms;
+  letter-spacing: 2px;
+}
+.offers .offer-card .details a:hover {
+  color: var(--color-pri);
+  background-color: transparent;
+}
+/* end offers */
