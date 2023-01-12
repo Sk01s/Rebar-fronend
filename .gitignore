@@ -1,4 +1,3 @@
-.env.dev
+.env.*
 node_modules
 .vercel
-.env.prod
