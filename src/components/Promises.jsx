@@ -1,5 +1,6 @@
 import React from "react";
 import MaterialIconsReact from "material-icons-react";
+import "../css/Promises.css";
 export default function Promises() {
   return (
     <div className="promises-container grid gap-2 ">
