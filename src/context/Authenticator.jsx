@@ -55,7 +55,6 @@ export function Authenticator({ children }) {
         throw error;
       });
   }
-
   function checkForVerifiction() {
     const checkForVerifictionInterval = setInterval(() => {
       auth?.currentUser?.reload().then((ok) => {
