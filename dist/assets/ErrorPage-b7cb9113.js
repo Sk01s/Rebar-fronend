@@ -1,0 +1,1 @@
+import{u as t,r as o,j as s}from"./index-34aaf63e.js";import{useCategories as a}from"./CategoiresContext-a3c24581.js";import"./firebase-config-cf75009f.js";function u(){const r=t(),{categories:e}=a();return o.useEffect(()=>{e.length!==0&&r("/Tech-Mode")},[e]),s("h1",{className:"error",children:"Check your internet "})}export{u as default};

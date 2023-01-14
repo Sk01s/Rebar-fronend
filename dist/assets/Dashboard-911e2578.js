@@ -1,1 +1,0 @@
-import{u as r,a as c,j as s,b as a}from"./index-4894d9cd.js";function u(){const{currentUser:n,signout:t}=r(),e=c(),o=()=>{t(),e("/Tech-Mode")};return s("article",{className:"dashboard container",children:[a("h1",{children:"Your Account"}),s("p",{children:["Email : ",n.email]}),a("button",{onClick:o,children:"sign out "})]})}export{u as default};

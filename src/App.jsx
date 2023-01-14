@@ -1,23 +1,36 @@
-import React, { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./css/reset.css";
 import "./css/styles.css";
-import { SetOut } from "./context/SetOutFucntions";
-import { Authenticator } from "./context/Authenticator";
-import { CategoiresContext } from "./context/CategoiresContext";
+
+const SetOut = lazy(() =>
+  import("./context/SetOutFucntions").then((module) => ({
+    default: module.SetOut,
+  }))
+);
+const Authenticator = lazy(() =>
+  import("./context/Authenticator").then((module) => ({
+    default: module.Authenticator,
+  }))
+);
+const CategoiresContext = lazy(() =>
+  import("./context/CategoiresContext").then((module) => ({
+    default: module.CategoiresContext,
+  }))
+);
 import LoadingAnimtion from "./components/LoadingAnimtion";
-const Login = React.lazy(() => import("./pages/Login"));
-const Nav = React.lazy(() => import("./components/Nav"));
-const Home = React.lazy(() => import("./pages/Home"));
-const Signup = React.lazy(() => import("./pages/Signup"));
-const SetOutProduct = React.lazy(() => import("./pages/SetOutProduct"));
-const CategoriesPage = React.lazy(() => import("./pages/CategoryPage"));
-const FavoritePage = React.lazy(() => import("./pages/FavoritePage"));
-const Dashboard = React.lazy(() => import("./pages/Dashboard"));
-const Reset = React.lazy(() => import("./pages/Reset"));
-const NotVerified = React.lazy(() => import("./pages/NotVerified"));
-const Error = React.lazy(() => import("./pages/ErrorPage"));
-const CartPage = React.lazy(() => import("./pages/CartPage"));
+const Login = lazy(() => import("./pages/Login"));
+const Nav = lazy(() => import("./components/Nav"));
+const Home = lazy(() => import("./pages/Home"));
+const Signup = lazy(() => import("./pages/Signup"));
+const SetOutProduct = lazy(() => import("./pages/SetOutProduct"));
+const CategoriesPage = lazy(() => import("./pages/CategoryPage"));
+const FavoritePage = lazy(() => import("./pages/FavoritePage"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Reset = lazy(() => import("./pages/Reset"));
+const NotVerified = lazy(() => import("./pages/NotVerified"));
+const Error = lazy(() => import("./pages/ErrorPage"));
+const CartPage = lazy(() => import("./pages/CartPage"));
 export default function App() {
   return (
     <Suspense fallback={<LoadingAnimtion />}>
