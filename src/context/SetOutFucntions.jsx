@@ -127,7 +127,7 @@ export function SetOut({ children }) {
   }
   async function addToCart(directory, quantity) {
     if (quantity < 1) return;
-    if (currentUser === null) history(" /signup");
+    if (currentUser === null) history("/signup");
     let { list } = await getList("cart");
     let neededToOrgnize;
 
@@ -165,7 +165,7 @@ export function SetOut({ children }) {
     );
   }
   async function addFavorite(directory) {
-    if (currentUser === null) history(" /signup");
+    if (currentUser === null) history("/signup");
 
     const favCollect = await getList("favorite");
     let list;

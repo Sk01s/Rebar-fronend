@@ -6,7 +6,7 @@ export default function ErrorPage() {
   const history = useNavigate();
   const { categories } = useCategories();
   useEffect(() => {
-    if (categories.length !== 0) history(" ");
+    if (categories.length !== 0) history("/");
   }, [categories]);
   return <h1 className="error">Check your internet </h1>;
 }

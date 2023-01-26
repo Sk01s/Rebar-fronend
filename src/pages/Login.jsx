@@ -8,7 +8,7 @@ export default function Login() {
   const password = useRef();
   const { login, currentUser } = useAuth();
   const history = useNavigate();
-  if (currentUser != undefined) history(" ");
+  if (currentUser != undefined) history("/");
   const handleSubmit = (e) => {
     e.preventDefault();
     const emailV = email.current.value;
@@ -25,9 +25,9 @@ export default function Login() {
               .replaceAll("-", " ")
           );
         if (!res?.user?.emailVerified) {
-          return history(" /notverified");
+          return history("/notverified");
         }
-        history(" ");
+        history("/");
       })
       .catch((message) => {
         setError(
@@ -68,11 +68,11 @@ export default function Login() {
       <button className="btn-submit">log in</button>
       <h3 className="switch-sign-way-text flex gap-1 justify-ce ">
         forgot password
-        <Link to=" /reset">reset password</Link>
+        <Link to="/reset">reset password</Link>
       </h3>
       <h3 className="switch-sign-way-text flex gap-1 justify-ce">
         You do not have an account
-        <Link to=" /signup">sign up</Link>
+        <Link to="/signup">sign up</Link>
       </h3>
     </form>
   );

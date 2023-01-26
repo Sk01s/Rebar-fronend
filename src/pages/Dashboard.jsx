@@ -6,14 +6,15 @@ import { useNavigate } from "react-router-dom";
 export default function Dashboard() {
   const { currentUser, signout } = useAuth();
   const history = useNavigate();
+  if (currentUser == undefined) history("/");
   const handleSignOut = () => {
     signout();
-    history(" ");
+    history("/");
   };
   return (
     <article className="dashboard container">
       <h1>Your Account</h1>
-      <p>Email : {currentUser.email}</p>
+      <p>Email : {currentUser?.email}</p>
       <button onClick={handleSignOut}>sign out </button>
     </article>
   );

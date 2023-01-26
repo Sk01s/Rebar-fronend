@@ -38,10 +38,10 @@ export default function CartPage() {
   useEffect(() => {
     async function getProductByCart() {
       if (currentUser === null) {
-        history(" /login");
+        history("/login");
         return setProductLocale(null);
       }
-      if (!currentUser.emailVerified) history(" /notverified");
+      if (!currentUser.emailVerified) history("/notverified");
       const list = await getCartProducts();
 
       setProductLocale(
