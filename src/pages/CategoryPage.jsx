@@ -41,7 +41,7 @@ export default function CategoriesPage() {
           })}
         />
       ) : (
-        <Gallary title="Search" products={filteredProduct} />
+        <Gallary title="Search" products={products} />
       )}
     </div>
   );

@@ -39,25 +39,25 @@ export default function App() {
           <SetOut>
             <Nav />
             <Routes>
-              <Route path="Tech-Mode/reset" element={<Reset />} />
+              <Route path="/reset" element={<Reset />} />
               <Route path="/403" element={<Error />} />
-              <Route path="/Tech-Mode/notverified" element={<NotVerified />} />
+              <Route path="/notverified" element={<NotVerified />} />
               <Route path="*" element={<Home />} />
-              <Route path="/Tech-Mode" element={<Home />} />
-              <Route path="/Tech-Mode/product" element={<SetOutProduct />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/product" element={<SetOutProduct />}>
                 <Route path=":productDirec" element={<SetOutProduct />} />
               </Route>
-              <Route path="/Tech-Mode/search" element={<CategoriesPage />}>
+              <Route path="/search" element={<CategoriesPage />}>
                 <Route path=":searchProduct" element={<CategoriesPage />} />
               </Route>
-              <Route path="/Tech-Mode/favorite" element={<FavoritePage />} />
-              <Route path="/Tech-Mode/signup" element={<Signup />} />
-              <Route path="/Tech-Mode/login" element={<Login />} />
-              <Route path="/Tech-Mode/dashboard" element={<Dashboard />} />
-              <Route path="/Tech-Mode/categories" element={<CategoriesPage />}>
+              <Route path="/favorite" element={<FavoritePage />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/categories" element={<CategoriesPage />}>
                 <Route path=":categoryId" element={<CategoriesPage />} />
               </Route>
-              <Route path="/Tech-Mode/cart" element={<CartPage />} />
+              <Route path="/cart" element={<CartPage />} />
             </Routes>
           </SetOut>
         </Authenticator>

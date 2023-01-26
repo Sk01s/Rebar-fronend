@@ -6,15 +6,29 @@
   background-color: var(--color-pri);
   border-radius: 10px;
 }
+.promises-container .promise-card {
+  background-color: rgb(243, 243, 243);
+  padding: 1.6rem;
+  border-radius: 1rem;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  -o-border-radius: 1rem;
+}
+
 .promises-container .promise-card h3 {
   font-size: 1.4rem;
   max-width: 70%;
+  margin: 0;
 }
-.promises-container .promise-card i {
+.promises-container .promise-card svg {
   font-size: 3rem;
   color: var(--color-ac-dark-faded);
 }
 @media (max-width: 528px) {
+  .promises-container .promise-card h3 {
+    margin: 0.9rem 0 0 0;
+  }
   .promises-container .promise-card {
     flex-direction: column;
     gap: 0.5rem;

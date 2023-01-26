@@ -8,9 +8,8 @@ const GallaryProductCart = ({ product }) => {
         textDecoration: "none",
         color: "inherit",
       }}
-      to={`/Tech-Mode/product/${product.category.id}-${product.id}`}
+      to={`/product/${product.category.id}-${product.id}`}
       className="product-card flex flex-direc"
-      // key={index + 1}
     >
       <div className="img-box">
         <img src={product.photos[0]} alt="" />

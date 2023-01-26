@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import MaterialIconsReact from "material-icons-react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../context/Authenticator";
 import { useCategories } from "../context/CategoiresContext";
 import { useSetOut } from "../context/SetOutFucntions";
@@ -36,10 +38,10 @@ export default function CartPage() {
   useEffect(() => {
     async function getProductByCart() {
       if (currentUser === null) {
-        history("/Tech-Mode/login");
+        history(" /login");
         return setProductLocale(null);
       }
-      if (!currentUser.emailVerified) history("/Tech-Mode/notverified");
+      if (!currentUser.emailVerified) history(" /notverified");
       const list = await getCartProducts();
 
       setProductLocale(
@@ -106,7 +108,7 @@ export default function CartPage() {
             }}
             className="counter-btn flex align-ce justify-ce"
           >
-            <MaterialIconsReact icon="add" />
+            <FontAwesomeIcon icon={faPlus} />
           </button>
           {quantity?.[index]}
           <button
@@ -130,11 +132,11 @@ export default function CartPage() {
             }}
             className="counter-btn flex align-ce justify-ce"
           >
-            <MaterialIconsReact icon="remove" />
+            <FontAwesomeIcon icon={faMinus} />
           </button>
         </span>
         <Link
-          to={`/Tech-Mode/product/${product[1]}-${product[0]?.id}`}
+          to={`/product/${product[1]}-${product[0]?.id}`}
           className="view-link"
         >
           view
@@ -162,7 +164,7 @@ export default function CartPage() {
             removeCartProduct(`${product[1]}-${product[0]?.id}`);
           }}
         >
-          <MaterialIconsReact icon="cancel" />
+          <FontAwesomeIcon icon={faXmark} />
         </button>
       </div>
     );

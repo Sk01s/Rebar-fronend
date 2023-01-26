@@ -8,7 +8,7 @@ export default function Hero() {
         <h1>Incredible Prices on All Your Favorite Items</h1>
         <p>Get more for less on selected brands</p>
         <Link
-          to="/Tech-Mode/categories"
+          to="/categories"
           style={{
             textDecoration: "none",
           }}

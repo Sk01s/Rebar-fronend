@@ -1,7 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;500;600&display=swap");
 :root {
-  --color-ac-light: #ffbfba;
-  --color-ac-dark: #b3201d;
-  --color-ac-dark-faded: #b31f1d8f;
+  --color-ac-light: #f1cf70;
+  --color-ac-dark: #ec5820;
+  --color-ac-dark-faded: #c03300;
   --color-light: #ebebebb2;
   --color-pri: #fff;
   --color-text: #222;
@@ -17,6 +18,9 @@
   html {
     font-size: 10px;
   }
+}
+* {
+  font-family: "Montserrat", sans-serif;
 }
 body {
   background-color: var(--color-light);
@@ -123,9 +127,6 @@ body {
 }
 /* end utilties */
 
-
-
-
 /* start products */
 .products-section {
   margin-top: 2rem;
@@ -150,12 +151,16 @@ body {
   height: 25rem;
   position: relative;
   border: solid 0.1rem var(--color-ac-light);
-  transition: 200ms;
+  transition: 500ms;
   box-shadow: -1px 7px 8px 1px #1111111d;
   -webkit-border-radius: 2rem;
   -moz-border-radius: 2rem;
   -ms-border-radius: 2rem;
   -o-border-radius: 2rem;
+  -webkit-transition: 500ms;
+  -moz-transition: 500ms;
+  -ms-transition: 500ms;
+  -o-transition: 500ms;
 }
 .product-card .img-box {
   margin-top: 0.8rem;
@@ -163,6 +168,10 @@ body {
   transition: transform 200ms;
   padding-bottom: 20px;
   overflow: hidden;
+  -webkit-transition: transform 200ms;
+  -moz-transition: transform 200ms;
+  -ms-transition: transform 200ms;
+  -o-transition: transform 200ms;
 }
 
 .product-card .img-box img {
@@ -172,7 +181,9 @@ body {
   object-position: center;
 }
 .product-card .details h3 {
-  font-size: 1rem;
+  font-size: 1.35rem;
+  text-transform: capitalize;
+  font-weight: bolder;
   font-weight: 300;
   margin: 0.2rem 0;
 }
@@ -187,8 +198,12 @@ body {
   background-color: var(--color-ac-light);
   padding: 1rem;
   border-radius: 0.2rem 1rem / 0.5rem 2rem;
-  transition: 200ms;
+  transition: 500ms;
   white-space: nowrap;
+  -webkit-transition: 500ms;
+  -moz-transition: 500ms;
+  -ms-transition: 500ms;
+  -o-transition: 500ms;
 }
 .product-card:hover {
   transform: scale(1.1);
@@ -204,7 +219,7 @@ body {
   text-align: center;
 }
 /* end category-page */
-/* Start displayProduct */
+/* Start SetoutProduct */
 .product-container {
   border-radius: 20px;
   max-height: calc(100vh - 12.5rem);
@@ -303,7 +318,7 @@ body {
 }
 .product-container .btn-add:hover {
   transition: 200ms;
-  background-color: #e44340fb;
+  background-color: var(--color-ac-dark-faded);
 }
 .product-container .btn-favorite {
   border: none;
@@ -311,11 +326,11 @@ body {
   margin-top: 1rem;
   border-radius: 2rem;
 }
-.product-container .btn-favorite i {
+.product-container .btn-favorite svg {
   transition: 200ms;
 }
-.product-container .btn-favorite:hover i,
-.product-container .btn-favorite.added i {
+.product-container .btn-favorite:hover svg,
+.product-container .btn-favorite.added svg {
   color: var(--color-ac-dark-faded);
 }
 .product-container .btn-buy {
@@ -348,7 +363,7 @@ body {
     max-width: 100%;
   }
 }
-/* End displayProduct */
+/* End SetoutProduct */
 /* Start Signup */
 .signup-container {
   width: 70%;
@@ -408,7 +423,7 @@ body {
 }
 .signup-container .error {
   padding: 1.5rem 3rem;
-  background-color: #910401;
+  background-color: var(--color-ac-dark-faded);
   margin-inline: auto;
   color: var(--color-pri);
   font-size: 1.5rem;
@@ -577,7 +592,7 @@ body {
   -ms-border-radius: 50%;
   -o-border-radius: 50%;
 }
-.product-cart-card .counter-btn i {
+.product-cart-card .counter-btn svg {
   color: var(--color-pri);
   font-size: 1.125rem;
   font-weight: 700;
@@ -616,9 +631,9 @@ body {
   border: none;
   background-color: transparent;
 }
-.product-cart-card .btn-remove i {
+.product-cart-card .btn-remove svg {
   color: var(--color-ac-dark);
-  font-size: 2.8rem;
+  font-size: 2rem;
 }
 .cart-container .buy-details {
   text-align: center;
@@ -767,3 +782,6 @@ div:has(.notverified-container) {
   width: 100%;
 }
 /* end pictures slider */
+::-webkit-scrollbar-corner {
+  background-color: rgb(221, 77, 77);
+}

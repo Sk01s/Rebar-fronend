@@ -12,7 +12,7 @@ export default function Signup() {
   const { signup, currentUser } = useAuth();
   const history = useNavigate();
 
-  if (currentUser != undefined) history("/Tech-Mode");
+  if (currentUser != undefined) history(" ");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ export default function Signup() {
     setError("");
     signup(emailV, passwordV, setError).then(
       () => {
-        history("/Tech-Mode/notverified");
+        history(" /notverified");
         submitButton.current.disabled = false;
       },
       () => (submitButton.current.disabled = false)
@@ -76,7 +76,7 @@ export default function Signup() {
       </button>
       <h3 className="switch-sign-way-text flex gap-2 justify-ce">
         You have an account
-        <Link to="/Tech-Mode/login">Log In</Link>
+        <Link to=" /login">Log In</Link>
       </h3>
     </form>
   );

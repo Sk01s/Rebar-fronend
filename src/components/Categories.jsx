@@ -12,7 +12,7 @@ export default function DisplayCategories({ picture, description, offer, id }) {
         <h2>{offer}</h2>
         <p>{description}</p>
         <Link
-          to={`/Tech-Mode/categories/${id}`}
+          to={`/categories/${id}`}
           style={{
             textDecoration: "none",
           }}

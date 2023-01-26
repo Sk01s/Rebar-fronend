@@ -8,7 +8,7 @@ export default function Dashboard() {
   const history = useNavigate();
   const handleSignOut = () => {
     signout();
-    history("/Tech-Mode");
+    history(" ");
   };
   return (
     <article className="dashboard container">

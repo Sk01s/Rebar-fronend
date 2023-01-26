@@ -1,4 +1,5 @@
-import MaterialIconsReact from "material-icons-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import React, { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCategories } from "../context/CategoiresContext";
@@ -28,7 +29,7 @@ export default function SetOutProduct() {
   if (productData === undefined) return <></>;
   const { price, photos, title, details } = productData;
   function handleOrder() {
-    addToCart(productDirec, quantity).then(() => history("/Tech-Mode/cart"));
+    addToCart(productDirec, quantity).then(() => history("/cart"));
   }
   return (
     <div className="container">
@@ -79,7 +80,7 @@ export default function SetOutProduct() {
                 setTimeout(() => setNotification(<></>), 1000);
               }}
             >
-              <MaterialIconsReact icon="favorite" />
+              <FontAwesomeIcon icon={faHeart} />
             </button>
           </div>
           <button

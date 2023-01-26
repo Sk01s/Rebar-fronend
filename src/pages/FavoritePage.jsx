@@ -13,8 +13,8 @@ export default function FavoritePage() {
   const { currentUser } = useAuth();
   const { categories, products } = useCategories();
   useEffect(() => {
-    if (!currentUser) return history("/Tech-Mode/login");
-    if (!currentUser?.emailVerified) return history("/Tech-Mode/notverified");
+    if (!currentUser) return history("/login");
+    if (!currentUser?.emailVerified) return history("/notverified");
     const FavoriteList = async () => {
       setFavoriteProduct(null);
       const favList = await getDoc(doc(db, "favorite", currentUser?.uid));

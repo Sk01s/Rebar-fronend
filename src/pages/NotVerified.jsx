@@ -25,11 +25,11 @@ const NotVerified = () => {
     const checkIterval = setInterval(() => {
       if (!currentUser) {
         clearInterval(checkIterval);
-        history("/Tech-Mode");
+        history(" ");
       }
       if (currentUser?.emailVerified) {
         clearInterval(checkIterval);
-        history("/Tech-Mode");
+        history(" ");
       }
     }, 1000);
     timer();

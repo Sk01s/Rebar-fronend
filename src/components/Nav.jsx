@@ -1,7 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
-import MaterialIcon from "material-icons-react";
+// import MaterialIcon from "material-icons-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBars,
+  faBurger,
+  faCartShopping,
+  faHeart,
+  faRightToBracket,
+  faSearch,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import {} from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.png";
+import { ReactSVG } from "react-svg";
 import { useCategories } from "../context/CategoiresContext";
 import { useAuth } from "../context/Authenticator";
 import "../css/Nav.css";
@@ -43,7 +54,8 @@ export default function Nav() {
       document.addEventListener(
         "click",
         (e) => {
-          if (e.path.includes(btnBurger.current)) return;
+          console.log("clicked");
+          if (e.composedPath().includes(btnBurger.current)) return;
           displayLinks(e);
         },
         {
@@ -63,22 +75,23 @@ export default function Nav() {
     };
   }, []);
 
-  const Gategories = categories?.map((category) => (
-    <div key={category.id}>
-      <Link to={`/Tech-Mode/categories/${category.id}`}>{category.name}</Link>
-    </div>
-  ));
-
+  const Gategories = categories?.map((category) => {
+    return (
+      <Link to={`/categories/${category.id}`} key={category.id}>
+        {category.name}
+      </Link>
+    );
+  });
   return (
     <header ref={header} className="navbar">
       <nav className=" justify-sb align-ce flex user-select">
         <div className="logo-search flex ju-sb align-ce">
           <Link
-            to="/Tech-Mode"
+            to=""
             className="logo cl-black pointer"
             style={{ color: "inherit", textDecoration: "none", padding: 0 }}
           >
-            <img src={logo} alt="logo" />
+            <ReactSVG src="/logo.svg" />
           </Link>
 
           <div className="search flex">
@@ -88,14 +101,14 @@ export default function Nav() {
               onChange={(e) => setInput(e.target.value)}
               onKeyUp={checkIsEnter}
             />
-            <Link ref={seachBtn} to={`/Tech-Mode/search/name=${input}`}>
-              <MaterialIcon icon="search" />
+            <Link ref={seachBtn} to={`/search/name=${input}`}>
+              <FontAwesomeIcon icon={faSearch} />
             </Link>
           </div>
         </div>
         {isSmall && (
           <div className="menu-btn" ref={btnBurger} onClick={displayLinks}>
-            <MaterialIcon icon="menu" className="material-icons menu pointer" />
+            <FontAwesomeIcon icon={faBars} />
           </div>
         )}
 
@@ -113,10 +126,10 @@ export default function Nav() {
                 color: "inherit",
                 textDecoration: "inherit",
               }}
-              to="/Tech-Mode/dashboard"
+              to="/dashboard"
               className="flex align-ce gap-1"
             >
-              <MaterialIcon icon="account_circle" />
+              <FontAwesomeIcon icon={faUser} />
               <span>Profile</span>
             </Link>
           ) : (
@@ -125,10 +138,10 @@ export default function Nav() {
                 color: "inherit",
                 textDecoration: "inherit",
               }}
-              to="/Tech-Mode/login"
+              to="/login"
               className="flex align-ce gap-1"
             >
-              <MaterialIcon icon="account_circle" />
+              <FontAwesomeIcon icon={faRightToBracket} />
               <span>Log In</span>
             </Link>
           )}
@@ -138,10 +151,10 @@ export default function Nav() {
               color: "inherit",
               textDecoration: "inherit",
             }}
-            to="/Tech-Mode/favorite"
+            to="/favorite"
             className="flex align-ce gap-1"
           >
-            <MaterialIcon icon="favorite" />
+            <FontAwesomeIcon icon={faHeart} />
             <span>Favorites</span>
           </Link>
 
@@ -150,10 +163,10 @@ export default function Nav() {
               color: "inherit",
               textDecoration: "inherit",
             }}
-            to="/Tech-Mode/cart"
+            to="/cart"
             className="flex align-ce gap-1"
           >
-            <MaterialIcon icon="shopping_cart" />
+            <FontAwesomeIcon icon={faCartShopping} />
             <span>Item</span>
           </Link>
         </div>
