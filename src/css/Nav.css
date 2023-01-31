@@ -123,6 +123,7 @@
   color: var(--color-ac-dark) !important;
 }
 .navbar .links a:hover svg {
+  outline: none;
   color: var(--color-ac-dark);
 }
 .navbar .links span:nth-child(2) {
@@ -131,7 +132,6 @@
 .navbar .links-small {
   transition: 200ms;
   position: absolute;
-  top: 7rem;
   right: 1rem;
   flex-direction: column;
   width: 95%;

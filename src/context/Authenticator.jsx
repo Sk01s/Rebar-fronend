@@ -50,7 +50,6 @@ export function Authenticator({ children }) {
         return data;
       })
       .catch((error) => {
-        console.log(error);
         setError(error.message.match(/:.+\(/)[0].slice(1, -1));
         throw error;
       });

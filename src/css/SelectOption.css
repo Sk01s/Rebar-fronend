@@ -1,0 +1,30 @@
+.option-selector {
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.option-selector .selector-bar {
+  display: flex;
+  gap: 1rem;
+}
+.option-selector .selector-bar .option {
+  transition: background-color 200ms;
+  cursor: pointer;
+  color: var(--color-pri);
+  background-color: var(--color-ac-dark);
+  padding: 0.6rem 1.2rem;
+  border-radius: 1rem;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  -o-border-radius: 1rem;
+  -webkit-transition: background-color 200ms;
+  -moz-transition: background-color 200ms;
+  -ms-transition: background-color 200ms;
+  -o-transition: background-color 200ms;
+}
+.option-selector .selector-bar .option.active {
+  background-color: var(--color-ac-dark-faded);
+}

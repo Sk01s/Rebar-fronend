@@ -125,7 +125,7 @@ export function SetOut({ children }) {
       list,
     });
   }
-  async function addToCart(directory, quantity) {
+  async function addToCart(directory, quantity, options) {
     if (quantity < 1) return;
     if (currentUser === null) history("/signup");
     let { list } = await getList("cart");
@@ -154,7 +154,7 @@ export function SetOut({ children }) {
     });
     if (neededToOrgnize) return;
 
-    list.push({ quantity, directory });
+    list.push({ quantity, directory, options });
     setCartProducts({ list });
     await updateDoc(
       doc(db, "cart", currentUser.uid),

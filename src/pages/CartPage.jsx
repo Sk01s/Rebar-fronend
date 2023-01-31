@@ -49,8 +49,9 @@ export default function CartPage() {
         list.map((product) => {
           const categoryId = product.directory.slice(0, 20);
           const productId = product.directory.slice(21);
-          return [
-            products.find((product) => {
+          const { options } = product;
+          const prod = {
+            ...products.find((product) => {
               if (
                 product.category.id === categoryId &&
                 parseInt(product.id) === parseInt(productId)
@@ -58,9 +59,9 @@ export default function CartPage() {
                 return true;
               return false;
             }),
-            categoryId,
-            parseInt(product.quantity),
-          ];
+          };
+          prod["options"] = options;
+          return [prod, categoryId, parseInt(product.quantity)];
         })
       );
       if (productsLocale.length === 0) setIsLoading(false);
@@ -80,7 +81,7 @@ export default function CartPage() {
     }
     setStates();
   }, [productsLocale]);
-  const productsCarts = productsLocale?.map((product, index) => {
+  const productsCartsEl = productsLocale?.map((product, index) => {
     if (product[0] === undefined) return <></>;
     return (
       <div
@@ -88,7 +89,9 @@ export default function CartPage() {
         key={`${product[1]}-${product[0]?.id}`}
       >
         <img src={product[0]?.photos[0]} alt="" />
-        <span>{product[0]?.title}</span>
+        <span>{`${product[0]?.title} ${[...Object.keys(product[0].options)].map(
+          (key) => `${key}: ${product[0].options[key]}`
+        )}`}</span>
         <span className="flex gap-1 align-ce justify-ce">
           <button
             onClick={() => {
@@ -192,7 +195,7 @@ export default function CartPage() {
 
   return (
     <div className="cart-container container flex flex-direc align-ce gap-2">
-      {productsCarts}
+      {productsCartsEl}
       {addressPopup && <AddressPopup />}
       <div className="buy-details">
         <div className="sub-total-price">Subtotal : {price} $</div>

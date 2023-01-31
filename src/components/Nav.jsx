@@ -44,6 +44,11 @@ export default function Nav() {
     return false;
   });
 
+  useEffect(() => {
+    if (!isSmall) return;
+    const headerHeight = header.current.getBoundingClientRect().height;
+    links.current.style.top = `${headerHeight}px`;
+  }, [isSmall]);
   const header = useRef(null);
   const links = useRef(null);
   const seachBtn = useRef(null);
@@ -54,7 +59,6 @@ export default function Nav() {
       document.addEventListener(
         "click",
         (e) => {
-          console.log("clicked");
           if (e.composedPath().includes(btnBurger.current)) return;
           displayLinks(e);
         },
