@@ -88,7 +88,7 @@ export default function CartPage() {
         className="product-cart-card flex align-ce gap-1"
         key={`${product[1]}-${product[0]?.id}`}
       >
-        <img src={product[0]?.photos[0]} alt="" />
+        <img src={product[0]?.photos?.[0]} alt="" />
         <span>{`${product[0]?.title} ${[...Object.keys(product[0].options)].map(
           (key) => `${key}: ${product[0].options[key]}`
         )}`}</span>
@@ -174,9 +174,11 @@ export default function CartPage() {
   });
   function createOrder() {
     return productsLocale.map((product, index) => {
+      const { options } = product[0];
       return {
         id: `${product[1]}-${product[0].id}`,
         quantity: quantity[index],
+        options,
       };
     });
   }

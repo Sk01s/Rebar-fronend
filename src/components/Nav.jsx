@@ -44,15 +44,15 @@ export default function Nav() {
     return false;
   });
 
+  const header = useRef(null);
+  const links = useRef(null);
+  const seachBtn = useRef(null);
+  const btnBurger = useRef();
   useEffect(() => {
     if (!isSmall) return;
     const headerHeight = header.current.getBoundingClientRect().height;
     links.current.style.top = `${headerHeight}px`;
   }, [isSmall]);
-  const header = useRef(null);
-  const links = useRef(null);
-  const seachBtn = useRef(null);
-  const btnBurger = useRef();
   useEffect(() => {
     if (isHidden === true) return;
     setTimeout(() => {
@@ -91,7 +91,7 @@ export default function Nav() {
       <nav className=" justify-sb align-ce flex user-select">
         <div className="logo-search flex ju-sb align-ce">
           <Link
-            to=""
+            to="/"
             className="logo cl-black pointer"
             style={{ color: "inherit", textDecoration: "none", padding: 0 }}
           >

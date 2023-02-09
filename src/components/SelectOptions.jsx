@@ -1,7 +1,6 @@
 import React, { useRef, useMemo } from "react";
 import "../css/SelectOption.css";
 const SelectOptions = ({ optionName, options, changeOptions }) => {
-  console.log(options);
   const optionsEl = useRef([]);
 
   const handleSelection = (index) => {

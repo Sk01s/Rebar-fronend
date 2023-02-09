@@ -9,6 +9,7 @@ import Popup from "../components/Popup";
 import { PicturesSlider } from "../components/PicturesSlider";
 import SelectOptions from "../components/SelectOptions";
 import { useMemo } from "react";
+const optionsData = {};
 
 export default function SetOutProduct() {
   const history = useNavigate();
@@ -20,8 +21,6 @@ export default function SetOutProduct() {
   const { products } = useCategories();
   const { addFavorite, addToCart } = useSetOut();
   const favBtn = useRef();
-  const optionsData = {};
-  console.log(products);
   const productData = useMemo(
     () =>
       products.find((product) => {
@@ -43,7 +42,9 @@ export default function SetOutProduct() {
     optionsData[optionName] = options;
   }
   const optionsEl = Object.keys(options)?.map((key, i) => {
-    optionsData[key] = options[key][0];
+    if (optionsData[key] == undefined) {
+      optionsData[key] = options[key][0];
+    }
     return (
       <SelectOptions
         changeOptions={setOption}

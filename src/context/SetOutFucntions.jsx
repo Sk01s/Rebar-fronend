@@ -129,7 +129,7 @@ export function SetOut({ children }) {
     if (quantity < 1) return;
     if (currentUser === null) history("/signup");
     let { list } = await getList("cart");
-    let neededToOrgnize;
+    let isDuplicated;
 
     function deleteProduct(directory) {
       list = list.filter((product) => {
@@ -137,23 +137,32 @@ export function SetOut({ children }) {
         return true;
       });
     }
-
     list.forEach((product) => {
-      if (neededToOrgnize === true) return;
+      if (isDuplicated === true) return;
+      if (product.directory === directory) {
+        if (parseInt(product.quantity) !== parseInt(quantity))
+          return deleteProduct(product.directory);
+        Object.keys(product.options).map((key) => {
+          if (product.options[key] !== options[key]) {
+            return deleteProduct(product.directory);
+          }
+        });
+      }
       if (
         product.directory === directory &&
-        parseInt(product.quantity) !== parseInt(quantity)
+        parseInt(product.quantity) === parseInt(quantity) &&
+        !Object.keys(product.options)
+          .map((key) => {
+            if (product.options[key] !== options[key]) {
+              return false;
+            }
+          })
+          .includes(false)
       )
-        return deleteProduct(product.directory);
-      if (
-        product.directory === directory &&
-        parseInt(product.quantity) === parseInt(quantity)
-      )
-        return (neededToOrgnize = true);
-      neededToOrgnize = false;
+        return (isDuplicated = true);
+      isDuplicated = false;
     });
-    if (neededToOrgnize) return;
-
+    if (isDuplicated) return;
     list.push({ quantity, directory, options });
     setCartProducts({ list });
     await updateDoc(
