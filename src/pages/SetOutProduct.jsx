@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faL } from "@fortawesome/free-solid-svg-icons";
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCategories } from "../context/CategoiresContext";
@@ -9,9 +9,16 @@ import Popup from "../components/Popup";
 import { PicturesSlider } from "../components/PicturesSlider";
 import SelectOptions from "../components/SelectOptions";
 import { useMemo } from "react";
-const optionsData = {};
 
 export default function SetOutProduct() {
+  const [isFirst, setIsFirst] = useState(() => true);
+  const [optionsData, setOptionsData] = useState(() => ({}));
+  useEffect(() => {
+    () => {
+      setIsFirst(true);
+      setOptionsData(() => ({}));
+    };
+  }, []);
   const history = useNavigate();
   let { productDirec } = useParams();
   const categoryId = productDirec.split("-")[0];
@@ -35,15 +42,27 @@ export default function SetOutProduct() {
   );
   if (productData === undefined) return <></>;
   const { price, photos, title, details, options } = productData;
+
   function handleOrder() {
-    addToCart(productDirec, quantity, optionsData).then(() => history("/cart"));
+    addToCart(productDirec, quantity, optionsData).then(() => {
+      setOptionsData(() => ({}));
+      history("/cart");
+    });
   }
   function setOption(optionName, options) {
-    optionsData[optionName] = options;
+    setOptionsData((prevOptionsData) => {
+      prevOptionsData[optionName] = options;
+      return prevOptionsData;
+    });
   }
   const optionsEl = Object.keys(options)?.map((key, i) => {
-    if (optionsData[key] == undefined) {
-      optionsData[key] = options[key][0];
+    if (optionsData?.[key] == undefined && isFirst) {
+      console.log("update");
+      setOptionsData((prevOptionsData) => {
+        setIsFirst(false);
+        prevOptionsData[key] = options[key][0];
+        return prevOptionsData;
+      });
     }
     return (
       <SelectOptions
@@ -86,7 +105,10 @@ export default function SetOutProduct() {
             <button
               className="btn-add"
               onClick={() => {
+                console.log(optionsData);
                 addToCart(productDirec, quantity, optionsData);
+                setOptionsData(() => ({}));
+                console.log(optionsData);
                 setNotification(<Popup text={title} title="added to cart" />);
                 setTimeout(() => setNotification(<></>), 1000);
               }}

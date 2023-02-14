@@ -19,7 +19,7 @@ const SelectOptions = ({ optionName, options, changeOptions }) => {
           <span
             ref={(v) => (optionsEl.current[i] = v)}
             key={`${option}-${i}`}
-            className="option"
+            className={i === 0 ? "option active" : "option"}
             onClick={() => handleSelection(i)}
           >
             {option}
