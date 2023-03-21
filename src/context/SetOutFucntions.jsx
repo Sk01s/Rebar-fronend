@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { setDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useAuth } from "./Authenticator";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import { db } from "../firebase-config";
 
 const SetOutFunction = React.createContext();
@@ -127,7 +127,48 @@ export function SetOut({ children }) {
   }
   async function addToCart(directory, quantity, options) {
     if (quantity < 1) return;
-    if (currentUser === null) history("/signup");
+    if (currentUser === null) {
+      let CartProduct = JSON.parse(localStorage.getItem("cartProduct"));
+      if (CartProduct == null) CartProduct = [];
+      let isDuplicated;
+
+      function deleteProduct(directory) {
+        CartProduct = CartProduct.filter((product) => {
+          if (product.directory === directory) return false;
+          return true;
+        });
+      }
+      CartProduct.forEach((product) => {
+        if (isDuplicated === true) return;
+        if (product.directory === directory) {
+          if (parseInt(product.quantity) !== parseInt(quantity))
+            return deleteProduct(product.directory);
+          Object.keys(product.options).map((key) => {
+            if (product.options[key] !== options[key]) {
+              return deleteProduct(product.directory);
+            }
+          });
+        }
+        if (
+          product.directory === directory &&
+          parseInt(product.quantity) === parseInt(quantity) &&
+          !Object.keys(product.options)
+            .map((key) => {
+              if (product.options[key] !== options[key]) {
+                return false;
+              }
+            })
+            .includes(false)
+        )
+          return (isDuplicated = true);
+        isDuplicated = false;
+        console.log(CartProduct);
+      });
+      if (isDuplicated) return;
+      CartProduct.push({ quantity, directory, options });
+      setCartProducts({ CartProduct });
+      localStorage.setItem("cartProduct", JSON.stringify(CartProduct));
+    }
     let { list } = await getList("cart");
     let isDuplicated;
 

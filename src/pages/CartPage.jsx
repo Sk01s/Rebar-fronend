@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -36,12 +36,30 @@ export default function CartPage() {
     });
   };
   useEffect(() => {
-    async function getProductByCart() {
+    async function getProductForCart() {
+      // if (product !== undefined)
       if (currentUser === null) {
-        history("/login");
-        return setProductLocale(null);
+        const product = JSON.parse(localStorage.getItem("cartProduct"));
+        return setProductLocale(
+          product.map((product) => {
+            const categoryId = product.directory.slice(0, 20);
+            const productId = product.directory.slice(21);
+            const { options } = product;
+            const prod = {
+              ...products.find((product) => {
+                if (
+                  product.category.id === categoryId &&
+                  parseInt(product.id) === parseInt(productId)
+                )
+                  return true;
+                return false;
+              }),
+            };
+            prod["options"] = options;
+            return [prod, categoryId, parseInt(product.quantity)];
+          })
+        );
       }
-      if (!currentUser.emailVerified) history("/notverified");
       const list = await getCartProducts();
 
       setProductLocale(
@@ -66,7 +84,7 @@ export default function CartPage() {
       );
       if (productsLocale.length === 0) setIsLoading(false);
     }
-    getProductByCart();
+    getProductForCart();
   }, [categories, currentUser]);
   useEffect(() => {
     function setStates() {
@@ -184,7 +202,11 @@ export default function CartPage() {
   }
   async function handleCheckout() {
     const order = createOrder();
-    const addressArray = await getAddress();
+    let addresArray;
+    if (currentUser != undefined) {
+      addresArray = [];
+    }
+    addressArray = await getAddress();
     if (addressArray.length === 0) return setAddressPopup(true);
     checkout(order);
   }

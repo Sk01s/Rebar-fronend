@@ -57,7 +57,6 @@ export default function SetOutProduct() {
   }
   const optionsEl = Object.keys(options)?.map((key, i) => {
     if (optionsData?.[key] == undefined && isFirst) {
-      console.log("update");
       setOptionsData((prevOptionsData) => {
         setIsFirst(false);
         prevOptionsData[key] = options[key][0];
@@ -105,10 +104,8 @@ export default function SetOutProduct() {
             <button
               className="btn-add"
               onClick={() => {
-                console.log(optionsData);
                 addToCart(productDirec, quantity, optionsData);
                 setOptionsData(() => ({}));
-                console.log(optionsData);
                 setNotification(<Popup text={title} title="added to cart" />);
                 setTimeout(() => setNotification(<></>), 1000);
               }}

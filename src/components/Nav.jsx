@@ -52,7 +52,8 @@ export default function Nav() {
     if (!isSmall) return;
     const headerHeight = header.current.getBoundingClientRect().height;
     links.current.style.top = `${headerHeight}px`;
-  }, [isSmall]);
+  }, [isSmall, isHidden]);
+
   useEffect(() => {
     if (isHidden === true) return;
     setTimeout(() => {
