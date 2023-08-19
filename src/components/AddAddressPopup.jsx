@@ -1,36 +1,30 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useSetOut } from "../context/SetOutFucntions";
-const AddressPopup = () => {
+const AddressPopup = ({ setAddressArray, close }) => {
   const { addAddress } = useSetOut();
+  const formComponent = useRef();
+
+  const addAddressBackend = () => {
+    const { firstname, lastname, zipcode, state, city, street, country } =
+      formComponent.current;
+    const addressData = {
+      firstname: firstname.value,
+      lastname: lastname.value,
+      zipcode: zipcode.value,
+      state: state.value,
+      city: city.value,
+      street: street.value,
+      country: country.options[country.selectedIndex].innerText,
+    };
+    addAddress(addressData);
+    setAddressArray((prev) => {
+      prev?.push(addressData);
+      return prev;
+    });
+    close(false);
+  };
   return (
-    <form
-      className="address-popup"
-      onSubmit={(e) => {
-        const {
-          target: {
-            firstname,
-            lastname,
-            zipcode,
-            state,
-            city,
-            street,
-            country,
-          },
-        } = e;
-        e.preventDefault();
-        const addressData = {
-          firstname: firstname.value,
-          lastname: lastname.value,
-          zipcode: zipcode.value,
-          state: state.value,
-          city: city.value,
-          street: street.value,
-          country: country.options[country.selectedIndex].innerText,
-        };
-        addAddress(addressData);
-        e.target.remove();
-      }}
-    >
+    <form className="address-popup" ref={formComponent}>
       <label htmlFor="firstname">first name</label>
       <input required type="text" id="firstname" />
 
@@ -304,7 +298,9 @@ const AddressPopup = () => {
 
       <label htmlFor="street">street</label>
       <input required type="text" id="street" />
-      <button>Add address</button>
+      <button type="button" onClick={addAddressBackend}>
+        Add address
+      </button>
     </form>
   );
 };

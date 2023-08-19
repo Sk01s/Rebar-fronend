@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
-  faBurger,
   faCartShopping,
   faHeart,
   faRightToBracket,
@@ -113,7 +112,10 @@ export default function Nav() {
         </div>
         {isSmall && (
           <div className="menu-btn" ref={btnBurger} onClick={displayLinks}>
-            <FontAwesomeIcon icon={faBars} />
+            <FontAwesomeIcon
+              icon={faBars}
+              style={{ fontSize: "1.5rem", color: "var(--color-ac-dark)" }}
+            />
           </div>
         )}
 

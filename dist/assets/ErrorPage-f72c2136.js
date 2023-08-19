@@ -1,1 +1,0 @@
-import{u as t,r as o,j as s}from"./index-9fcefab8.js";import{useCategories as a}from"./CategoiresContext-562232d7.js";import"./firebase-config-409fc865.js";function u(){const e=t(),{categories:r}=a();return o.useEffect(()=>{r.length!==0&&e("/")},[r]),s("h1",{className:"error",children:"Check your internet "})}export{u as default};

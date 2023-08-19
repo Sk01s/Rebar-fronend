@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./css/reset.css";
 import "./css/styles.css";
@@ -32,6 +32,27 @@ const NotVerified = lazy(() => import("./pages/NotVerified"));
 const Error = lazy(() => import("./pages/ErrorPage"));
 const CartPage = lazy(() => import("./pages/CartPage"));
 export default function App() {
+  useEffect(() => {
+    async function createCustomer() {
+      if (localStorage.getItem("customerId")) return;
+      const customerId = crypto.randomUUID();
+      console.log(customerId);
+      localStorage.setItem("customerId", customerId);
+      fetch(
+        `${import.meta.env.VITE_APP_API_HOST_LINK}/payment/create-customer`,
+        {
+          body: JSON.stringify({
+            userId: customerId,
+          }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+    createCustomer();
+  }, []);
   return (
     <Suspense fallback={<LoadingAnimtion />}>
       <CategoiresContext>

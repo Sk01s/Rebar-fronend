@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { setDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import React, { useContext, useState, useId } from "react";
+import { setDoc, doc, getDoc, updateDoc, addDoc } from "firebase/firestore";
 import { useAuth } from "./Authenticator";
 import { json, useNavigate } from "react-router-dom";
 import { db } from "../firebase-config";
@@ -33,17 +33,53 @@ export function SetOut({ children }) {
   const history = useNavigate();
   const { currentUser } = useAuth();
 
-  async function getList(collection) {
-    const docs = await getDoc(doc(db, collection, currentUser?.uid));
-    const docData = docs.data();
-
-    return docData;
+  async function getList(collection, segment) {
+    let data;
+    if (currentUser == undefined) {
+      data = JSON.parse(localStorage.getItem(collection));
+    } else {
+      const docs = await getDoc(doc(db, collection, currentUser?.uid));
+      data = docs.data()[segment];
+    }
+    return data;
   }
+
   async function addAddress(addressDetails) {
     const { firstname, lastname, country, state, street, city, zipcode } =
       addressDetails;
-    const { address } = await getList("address");
-    address?.filter((address) => {
+    if (currentUser == undefined) {
+      let address = JSON.parse(localStorage.getItem("address")) || [];
+
+      address = address?.filter((address) => {
+        if (
+          address?.firstname === firstname &&
+          address?.lastname === lastname &&
+          address?.country === country &&
+          address?.state === state &&
+          address?.street === street &&
+          address?.city === city &&
+          address?.zipcode === zipcode
+        )
+          return false;
+        return true;
+      });
+      address.push({
+        firstname,
+        lastname,
+        country,
+        city,
+        state,
+        street,
+        zipcode,
+      });
+
+      localStorage.setItem("address", JSON.stringify(address));
+      return;
+    }
+
+    let { address } = await getList("address");
+
+    address = address?.filter((address) => {
       if (
         address.firstname === firstname &&
         address.lastname === lastname &&
@@ -75,14 +111,15 @@ export function SetOut({ children }) {
     );
   }
 
-  async function checkout(order) {
+  async function checkout(order, orderId, address) {
     const respons = await fetch(
       `${
-        import.meta.env.VITE_APP_API_HOST_LINK
-      }/payment/create-checkout-session`,
+        import.meta.env.VITE_APP_API_HOST_LINK      }/payment/create-checkout-session`,
       {
         body: JSON.stringify({
-          userId: currentUser.uid,
+          userId: currentUser?.uid || localStorage.getItem("customerId"),
+          orderId,
+          address,
           items: order,
         }),
         method: "POST",
@@ -115,12 +152,15 @@ export function SetOut({ children }) {
     );
   }
   async function removeCartProduct(productDirectory) {
-    let { list } = await getList("cart");
+    let list = await getList("cart", "list");
     list = list.filter((product) => {
       if (product.directory === productDirectory) return false;
       return true;
     });
     setCartProducts({ list });
+    if (currentUser == undefined) {
+      localStorage.setItem("cart", JSON.stringify(list));
+    }
     await updateDoc(doc(db, "cart", currentUser.uid), {
       list,
     });
@@ -128,7 +168,7 @@ export function SetOut({ children }) {
   async function addToCart(directory, quantity, options) {
     if (quantity < 1) return;
     if (currentUser === null) {
-      let CartProduct = JSON.parse(localStorage.getItem("cartProduct"));
+      let CartProduct = JSON.parse(localStorage.getItem("cart"));
       if (CartProduct == null) CartProduct = [];
       let isDuplicated;
 
@@ -162,12 +202,11 @@ export function SetOut({ children }) {
         )
           return (isDuplicated = true);
         isDuplicated = false;
-        console.log(CartProduct);
       });
       if (isDuplicated) return;
       CartProduct.push({ quantity, directory, options });
       setCartProducts({ CartProduct });
-      localStorage.setItem("cartProduct", JSON.stringify(CartProduct));
+      localStorage.setItem("cart", JSON.stringify(CartProduct));
     }
     let { list } = await getList("cart");
     let isDuplicated;
@@ -241,6 +280,17 @@ export function SetOut({ children }) {
     );
     return isAdded;
   }
+  async function addOrder(items, id, address) {
+    await setDoc(
+      doc(db, "orders", currentUser?.uid || localStorage.getItem("customerId")),
+      {
+        isPayed: false,
+        id,
+        address,
+        items,
+      }
+    );
+  }
   async function getFavProducts() {
     if (favProducts?.[0] === undefined) {
       const favProducts = await getList("favorite");
@@ -251,18 +301,18 @@ export function SetOut({ children }) {
   }
   async function getCartProducts() {
     if (cartProducts?.[0] === undefined) {
-      const cartProducts = await getList("cart");
+      const cartProducts = await getList("cart", "list");
       if (cartProducts === undefined) return createCart();
-      return cartProducts.list;
+      return cartProducts;
     }
     return cartProducts;
   }
   async function getAddress() {
     if (address?.[0] === undefined) {
-      const addressArray = await getList("address");
+      const addressArray = await getList("address", "address");
       if (addressArray === undefined) return createAddress();
-      setAddress(addressArray.address);
-      return addressArray.address;
+      setAddress(addressArray);
+      return addressArray;
     }
     return address;
   }
@@ -273,6 +323,7 @@ export function SetOut({ children }) {
     addFavorite,
     addToCart,
     addAddress,
+    addOrder,
     checkout,
     getFavProducts,
     getCartProducts,

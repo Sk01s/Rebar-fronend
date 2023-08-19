@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/Authenticator";
 import { useCategories } from "../context/CategoiresContext";
 import { useSetOut } from "../context/SetOutFucntions";
 import DisplayProducts from "../components/Gallary";
-import AddressPopup from "../components/AddAddressPopup";
+import AddAddressPopup from "../components/AddAddressPopup";
+import SelectingAddressPopup from "../components/SelectingAddressPopup";
+import CartProduct from "../components/CartProduct";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 export default function CartPage() {
   const { categories, products } = useCategories();
   const { currentUser } = useAuth();
@@ -18,28 +17,34 @@ export default function CartPage() {
     checkout,
     getAddress,
   } = useSetOut();
+  const buyBtn = useRef();
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState();
   const [quantity, setQuanitiy] = useState();
   const [productsLocale, setProductLocale] = useState([]);
   const [price, setPrice] = useState(0);
-  const [addressPopup, setAddressPopup] = useState();
-  const history = useNavigate();
+  const [addressCreationPopup, createAddress] = useState(() => false);
+  const [addressSelectionPopup, settingAddress] = useState(() => false);
+  const [selectedAddress, setSelectedAddress] = useState();
 
-  const calculatePrice = () => {
-    setPrice(() => {
-      return productsLocale.reduce((acc, next) => {
-        if (next[0]?.price === undefined) return 0;
-        return (
-          parseFloat(acc) + parseFloat(next[0]?.price) * parseFloat(next[2])
-        );
-      }, 0);
-    });
-  };
+  const [addressArray, setAddressArray] = useState(() => []);
+
+  useEffect(() => {
+    async function order() {
+      if (!selectedAddress) return;
+      const orderId = crypto.randomUUID();
+      const order = createOrder();
+      // await addOrder(order, orderId, selectedAddress);
+      await checkout(order, orderId, selectedAddress);
+    }
+    order();
+  }, [selectedAddress]);
+
   useEffect(() => {
     async function getProductForCart() {
       // if (product !== undefined)
       if (currentUser === null) {
-        const product = JSON.parse(localStorage.getItem("cartProduct"));
+        const product = JSON.parse(localStorage.getItem("cart"));
         return setProductLocale(
           product.map((product) => {
             const categoryId = product.directory.slice(0, 20);
@@ -86,6 +91,7 @@ export default function CartPage() {
     }
     getProductForCart();
   }, [categories, currentUser]);
+
   useEffect(() => {
     function setStates() {
       if (productsLocale[0] === undefined) return;
@@ -98,98 +104,22 @@ export default function CartPage() {
       setIsLoading(false);
     }
     setStates();
+    setTimeout(() => {
+      setIsBtnDisabled(false);
+    }, 2000);
   }, [productsLocale]);
-  const productsCartsEl = productsLocale?.map((product, index) => {
-    if (product[0] === undefined) return <></>;
-    return (
-      <div
-        className="product-cart-card flex align-ce gap-1"
-        key={`${product[1]}-${product[0]?.id}`}
-      >
-        <img src={product[0]?.photos?.[0]} alt="" />
-        <span>{`${product[0]?.title} ${[...Object.keys(product[0].options)].map(
-          (key) => `${key}: ${product[0].options[key]}`
-        )}`}</span>
-        <span className="flex gap-1 align-ce justify-ce">
-          <button
-            onClick={() => {
-              setPrice(
-                (prev) => parseFloat(prev) + parseFloat(product[0]?.price)
-              );
-              setQuanitiy((prev) => {
-                return prev?.map((num, i) => {
-                  if (i === index) return num + 1;
-                  return num;
-                });
-              });
-              setQuanitiyDb(
-                quantity?.[index] + 1,
-                `${product[1]}-${product[0]?.id}`
-              );
-            }}
-            className="counter-btn flex align-ce justify-ce"
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
-          {quantity?.[index]}
-          <button
-            onClick={(e) => {
-              if (quantity?.[index] === 1) {
-                return;
-              }
-              setPrice(
-                (prev) => parseFloat(prev) - parseFloat(product[0]?.price)
-              );
-              setQuanitiy((prev) => {
-                return prev.map((num, i) => {
-                  if (i === index) return num - 1;
-                  return num;
-                });
-              });
-              setQuanitiyDb(
-                quantity?.[index] - 1,
-                `${product[1]}-${product[0]?.id}`
-              );
-            }}
-            className="counter-btn flex align-ce justify-ce"
-          >
-            <FontAwesomeIcon icon={faMinus} />
-          </button>
-        </span>
-        <Link
-          to={`/product/${product[1]}-${product[0]?.id}`}
-          className="view-link"
-        >
-          view
-        </Link>
-        <span className="price">Price: {product[0]?.price} $</span>
-        <button
-          className="btn-remove pointer"
-          onClick={() => {
-            setProductLocale((prevProduct) => {
-              return prevProduct.filter((produ) => {
-                if (
-                  `${produ[1]}-${produ[0].id}` ===
-                  `${product[1]}-${product[0]?.id}`
-                )
-                  return false;
-                return true;
-              });
-            });
 
-            setPrice(
-              (prev) =>
-                parseFloat(prev) -
-                parseFloat(product[0]?.price) * parseFloat(quantity?.[index])
-            );
-            removeCartProduct(`${product[1]}-${product[0]?.id}`);
-          }}
-        >
-          <FontAwesomeIcon icon={faXmark} />
-        </button>
-      </div>
-    );
-  });
+  const calculatePrice = () => {
+    setPrice(() => {
+      return productsLocale.reduce((acc, next) => {
+        if (next[0]?.price === undefined) return 0;
+        return (
+          parseFloat(acc) + parseFloat(next[0]?.price) * parseFloat(next[2])
+        );
+      }, 0);
+    });
+  };
+
   function createOrder() {
     return productsLocale.map((product, index) => {
       const { options } = product[0];
@@ -200,30 +130,65 @@ export default function CartPage() {
       };
     });
   }
+
   async function handleCheckout() {
-    const order = createOrder();
-    let addresArray;
-    if (currentUser != undefined) {
-      addresArray = [];
+    const addresses = await getAddress();
+    setAddressArray(addresses || []);
+
+    if (addresses?.length == 0) {
+      console.log("oppening");
+      return createAddress(true);
     }
-    addressArray = await getAddress();
-    if (addressArray.length === 0) return setAddressPopup(true);
-    checkout(order);
+    settingAddress(true);
   }
+
+  const productsCartsEl = productsLocale?.map((product, index) => {
+    if (product[0] === undefined) return <></>;
+    return (
+      <CartProduct
+        index={index}
+        product={product}
+        quantity={quantity}
+        removeCartProduct={removeCartProduct}
+        setPrice={setPrice}
+        setProductLocale={setProductLocale}
+        setQuanitiy={setQuanitiy}
+        setQuanitiyDb={setQuanitiyDb}
+        key={`${product[1]}-${product[0]?.id}`}
+      />
+    );
+  });
+
   if (!isLoading && productsLocale?.length === 0)
     return (
       <div className="container">
         <DisplayProducts products={[]} title=" No product has been added" />
       </div>
     );
-
   return (
     <div className="cart-container container flex flex-direc align-ce gap-2">
       {productsCartsEl}
-      {addressPopup && <AddressPopup />}
+      {addressCreationPopup && (
+        <AddAddressPopup
+          setAddressArray={setAddressArray}
+          close={createAddress}
+        />
+      )}
+      {addressSelectionPopup && (
+        <SelectingAddressPopup
+          addressArray={addressArray}
+          createAddress={createAddress}
+          setSelectAddress={setSelectedAddress}
+          toggle={settingAddress}
+        />
+      )}
       <div className="buy-details">
         <div className="sub-total-price">Subtotal : {price} $</div>
-        <button className="btn-buy" onClick={handleCheckout}>
+        <button
+          disabled={isBtnDisabled}
+          className="btn-buy"
+          onClick={handleCheckout}
+        >
           Check Out
         </button>
       </div>
